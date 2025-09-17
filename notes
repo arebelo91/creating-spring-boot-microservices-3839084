@@ -26,3 +26,13 @@ DI Configuration
 - Java classes:
   - Annotated method: @Bean method within an @Configuration class
   - Annotated class such as @Component, @Service, @Repository
+
+# Section 01_02
+- A SprinBeans class was created, defining the different Beans (repository, tourManagement and TravelAgent).
+  This is the configuration for the dependency injection.
+
+- A context was then loaded with the Spring Beans class in the main application: 
+  "ApplicationContext context = new AnnotationConfigApplicationContext(SpringBeans.class);"
+
+- Instantiation of TravelAgentService object was performed from the context Bean:
+  "TravelAgentService agent = context.getBean(TravelAgentService.class);"
