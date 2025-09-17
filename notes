@@ -1,0 +1,38 @@
+# Section 01_01
+Spring is an open-source framework for Java applications that provides dependency injection of Spring Beans via 
+Spring application context, which follows the inversion-of-control desing pattern.
+
+Dependency Injection (DI) Principle
+- Separates the usage of objects from the lifecycle of their dependent objects
+- Creation of the dependencies of a class is managed outside the class
+- Makes application more flexible and maintainable and easier to test 
+
+Inversion-of-Control Framework
+- Maintains lifecycle of an object and its dependencies
+- Requires dependency injection
+- Class "relinquishes control" to the framework
+
+Spring Context
+- Also known as spring container
+-The core Spring inversion-of-control framework
+
+Spring Bean
+- Java object managed by the Spring application context
+- Singleton scope by default
+- Other scopes: prototype, request, session
+
+DI Configuration
+- Originally via XML files: difficult to manage
+- Java classes:
+  - Annotated method: @Bean method within an @Configuration class
+  - Annotated class such as @Component, @Service, @Repository
+
+# Section 01_02
+- A SprinBeans class was created, defining the different Beans (repository, tourManagement and TravelAgent).
+  This is the configuration for the dependency injection.
+
+- A context was then loaded with the Spring Beans class in the main application: 
+  "ApplicationContext context = new AnnotationConfigApplicationContext(SpringBeans.class);"
+
+- Instantiation of TravelAgentService object was performed from the context Bean:
+  "TravelAgentService agent = context.getBean(TravelAgentService.class);"
