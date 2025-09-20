@@ -1,4 +1,4 @@
-# Section 01_01
+# Section 01_01: Inversion of Control Pattern
 Spring is an open-source framework for Java applications that provides dependency injection of Spring Beans via 
 Spring application context, which follows the inversion-of-control desing pattern.
 
@@ -27,7 +27,7 @@ DI Configuration
   - Annotated method: @Bean method within an @Configuration class
   - Annotated class such as @Component, @Service, @Repository
 
-# Section 01_02
+# Section 01_02: Spring ApplicationContext and Spring Beans
 - A SprinBeans class was created, defining the different Beans (repository, tourManagement and TravelAgent).
   This is the configuration for the dependency injection.
 
@@ -36,3 +36,18 @@ DI Configuration
 
 - Instantiation of TravelAgentService object was performed from the context Bean:
   "TravelAgentService agent = context.getBean(TravelAgentService.class);"
+
+# Section 01_03: Spring autowiring annotations
+- Another way to configure dependency injection is with autowiring
+
+- For using the autowire functionality for DI, we need to annotate the different class layers:
+- - Repository with @Repository
+- - Services with @Service
+
+- With these annotations we do not need the spring beans class that instantiates the class objects with explicit dependencies
+
+- Since the spring beans class is removed, we need to adapt the instantiation of the context in the application:
+"ApplicationContext context = new AnnotationConfigApplicationContext(SpringBeans.class);"
+                                           |
+                                           V
+"ApplicationContext context = new AnnotationConfigApplicationContext(Application.class.getPackageName());"
