@@ -14,7 +14,7 @@ Inversion-of-Control Framework
 
 Spring Context
 - Also known as spring container
--The core Spring inversion-of-control framework
+- The core Spring inversion-of-control framework
 
 Spring Bean
 - Java object managed by the Spring application context
@@ -46,8 +46,23 @@ DI Configuration
 
 - With these annotations we do not need the spring beans class that instantiates the class objects with explicit dependencies
 
-- Since the spring beans class is removed, we need to adapt the instantiation of the context in the application:
+- Since the spring beans class is removed, we need to adapt the instantiation of the context in the application. 
+  We will scan for the dependency packages:
 "ApplicationContext context = new AnnotationConfigApplicationContext(SpringBeans.class);"
                                            |
                                            V
 "ApplicationContext context = new AnnotationConfigApplicationContext(Application.class.getPackageName());"
+
+# Section 02_01: Introduction to Spring Initialzr
+- Spring Initializr:
+- - Is a tool for creating spring boot projects
+- - Creates a packages structure
+- - Creates the pom.xml/build.gradle files
+- - Creates Java source classes
+
+- Our first spring boot microservice will be a Web application for relational DB, requiring the dependencies:
+- - Spring Web, which includes Tomcat and Spring MVC
+- - Rest repositories to access Spring repositories via REST
+- - Java persistence API (JPA)
+- - Lombok: generates getters/setters/logger bytecode
+- - H2 in memory database driver
