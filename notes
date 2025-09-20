@@ -66,3 +66,9 @@ DI Configuration
 - - Java persistence API (JPA)
 - - Lombok: generates getters/setters/logger bytecode
 - - H2 in memory database driver
+
+# Section 02_03: Build, deploy, and launch the microservice
+All steps via cli inside the project folder:
+- Build: mvn clean install. A jar file for the application is built in the /target folder after the command terminates
+- Run application: java -jar <jar_file>
+
