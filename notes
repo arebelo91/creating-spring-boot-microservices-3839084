@@ -167,10 +167,12 @@ All steps via cli inside the project folder:
     }"
 
 # Section 03_05: Introduction to Spring Data query methods
-- Spring data allows for easy implementation of medium to complex queries on repositories via property expression,e.g.:
+- Spring data allows for easy definition of medium to complex queries on repositories via property expression, e.g.:
 - - All easy tours
 - - Tours less than $800
 - - Easy tours less than $800
+
+- No need for any code implmentation. Only need to define the methods in the repositories, following the rules below.
 
 - Rules for Property Expression: findBy
 - - Define single return type: Class or Optional<Class>
@@ -185,3 +187,4 @@ All steps via cli inside the project folder:
 - - Same rules as findBy, e.g.:
     long countByRegion(Region region);
     long countbyPrice(int price);
+
