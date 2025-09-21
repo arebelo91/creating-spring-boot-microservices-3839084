@@ -144,7 +144,7 @@ All steps via cli inside the project folder:
 - Inject the repositories into Spring Bean Services:
 - - "@Service
     public class TourPackageService {
-      //Dependency inmjection via autowire
+      //Dependency injection via autowire
       private TourPackagerepository tourPackageRepository;
 
       public TourPackageService(TourPackageRepository tourPackageRepository){
