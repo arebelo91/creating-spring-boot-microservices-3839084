@@ -166,3 +166,22 @@ All steps via cli inside the project folder:
       ...(Implement TourService methods)...
     }"
 
+# Section 03_05: Introduction to Spring Data query methods
+- Spring data allows for easy implementation of medium to complex queries on repositories via property expression,e.g.:
+- - All easy tours
+- - Tours less than $800
+- - Easy tours less than $800
+
+- Rules for Property Expression: findBy
+- - Define single return type: Class or Optional<Class>
+- - or define multi return type: collection container (List, Iterable, Collection)
+- - Begin the method signature with findBy, followed by the property name in camel case
+- - Parameter(s) with data type of the entity attribute, e.g.:
+    List<Tour> findByRegion(Region region);
+    Optional<Tour> finodByTitle(String title);
+
+- Rules for Property Expression: CountBy
+- - The return type is long
+- - Same rules as findBy, e.g.:
+    long countByRegion(Region region);
+    long countbyPrice(int price);
