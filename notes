@@ -102,7 +102,7 @@ All steps via cli inside the project folder:
 - Every instance of an entity will correspond to a row in the table.
 
 # Section 03_03: Declare JPA repositories
-- Spring Data (Repository) abstracts away any particaulr data source
+- Spring Data (Repository) abstracts away any particaular data source
 
 - The most basic repository in Java is a repository interface. It is only a marker and does not contain any methods:
 - - public interface Repository<T,ID>
@@ -139,3 +139,30 @@ All steps via cli inside the project folder:
     public class TourRepository extends JpaRepository<Tour,Integer>{
   
     }"
+
+# Section 03_04: Spring Data JPA Repository dependency injection
+- Inject the repositories into Spring Bean Services:
+- - "@Service
+    public class TourPackageService {
+      //Dependency inmjection via autowire
+      private TourPackagerepository tourPackageRepository;
+
+      public TourPackageService(TourPackageRepository tourPackageRepository){
+        this.tourPackagerepository = tourPackageRepository;
+      }
+      ...(Implement TourPackageService methods)...
+    }"
+
+    "@Service
+    public class TourService {
+      //Dependency inmjection via autowire
+      private TourPackagerepository tourPackageRepository;
+      private TourRepository tourRepository;
+
+      public TourService(TourPackageRepository tourPackageRepository, TourRepository tourRepository){
+        this.tourPackagerepository = tourPackageRepository;
+        this.tourRepository = tourRepository;
+      }
+      ...(Implement TourService methods)...
+    }"
+
