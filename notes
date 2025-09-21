@@ -72,3 +72,33 @@ All steps via cli inside the project folder:
 - Build: mvn clean install. A jar file for the application is built in the /target folder after the command terminates
 - Run application: java -jar <jar_file>
 
+# Section 03_02: The persistence entities
+- Using Java Persistence API (JPA)
+- After we have identified the entity classes defining the business model, we need to define them, so they can be persitently stored
+- Each entity class is defined with @Entity annotation, and corresponds to a table that is stored in the database:
+
+    "@Entity
+    public class Tour {...}"
+
+- Entity attributes are defined with the @Column annotation. The @Id annotation is the primary key (unique identifier) of an entity:
+
+    "@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
+    private String title;
+
+    @Column(length = 2000)
+    private String description;
+
+    @Column(length = 2000)
+    private String blurb;
+
+    @Column
+    private Integer price;"
+
+- Entities, being classes, also have constructors, getters, and other relevant methods.
+- Every instance of an entity will correspond to a row in the table.
+
+
