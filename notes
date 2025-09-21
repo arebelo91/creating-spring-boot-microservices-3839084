@@ -101,4 +101,41 @@ All steps via cli inside the project folder:
 - Entities, being classes, also have constructors, getters, and other relevant methods.
 - Every instance of an entity will correspond to a row in the table.
 
+# Section 03_03: Declare JPA repositories
+- Spring Data (Repository) abstracts away any particaulr data source
 
+- The most basic repository in Java is a repository interface. It is only a marker and does not contain any methods:
+- - public interface Repository<T,ID>
+    T: Domain type the repositroy manages
+    ID: Type of the entity ID
+
+- CRUD Repository is a Spring Data artifact common to many types of data sources, extending from Repository.
+  It declares methods for create, update, read and delete entities.
+- - public interface CrudRepository<T,ID> extends Repository<T,ID>
+
+- ListCrudRepository declares more methods that use list collections instead of iterables.
+- - public interface ListCrudRepository<T,ID> extends CrudRepository<T,ID>
+
+- JpaRepository extends from ListCrudRepository and adds even more methods for relational database sources.
+- - public interface JpaRepository<T,ID> extends ListCrudRepository<T,ID>
+
+- In the current application, we will extend our repositories from JpaRepository:
+
+- For that, we create a repo folder under java/com/example/explorecalijpa.
+- The create the TourPackageRepository.java and TourRepository.java classes that will host our repositories.
+- Finally, make the imports and define the classes:
+- - "package main.java.com.example.explorecalijpa.repo;
+    import main.java.com.example.explorecalijpa.model.TourPackage;
+    import org.springframework.data.repository.JpaRepository;
+
+    public class TourPackageRepository extends JpaRepository<TourPackage,String>{
+  
+    }"
+
+    "package main.java.com.example.explorecalijpa.repo;
+    import com.example.explorecalijpa.model.Tour;
+    import org.springframework.data.repository.JpaRepository;
+
+    public class TourRepository extends JpaRepository<Tour,Integer>{
+  
+    }"
