@@ -1,3 +1,4 @@
+# Section 01: Spring Framework Introduction
 # Section 01_01: Inversion of Control Pattern
 Spring is an open-source framework for Java applications that provides dependency injection of Spring Beans via 
 Spring application context, which follows the inversion-of-control desing pattern.
@@ -53,6 +54,7 @@ DI Configuration
                                            V
 "ApplicationContext context = new AnnotationConfigApplicationContext(Application.class.getPackageName());"
 
+# Section 02: Create a Spring Boot Microservice
 # Section 02_01: Introduction to Spring Initialzr
 - Spring Initializr:
 - - Is a tool for creating spring boot projects
@@ -72,6 +74,7 @@ All steps via cli inside the project folder:
 - Build: mvn clean install. A jar file for the application is built in the /target folder after the command terminates
 - Run application: java -jar <jar_file>
 
+# Section 03: Leverage Spring-Data-JPA Repository Interfacess
 # Section 03_02: The persistence entities
 - Using Java Persistence API (JPA)
 - After we have identified the entity classes defining the business model, we need to define them, so they can be persitently stored
@@ -188,3 +191,62 @@ All steps via cli inside the project folder:
     long countByRegion(Region region);
     long countbyPrice(int price);
 
+# Section 04: Expose Restful API's with Spring Data REST
+# Section 04_02: Mapping API endpoints to repositories
+
+- Spring Data REST expose the repositories as services without extra coding or configuration
+
+- Need to add the Spring Data REST starter dependency to the pom file, and rebuild the application:
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-rest</artifactId>
+  </dependency>
+
+- RESTful API Discovery and Exposition:
+- - Finds the Spring Data Repository
+- - Creates an endpoint that matches the entity name
+- - Appends an s (configurable if not desired)
+- - Exposes methods as RESTful resource API over HTTP
+
+- HTTP Get Mapping:
+  public interface TourRepository extends JpaRepository<Tour,Integer>
+  API Endpoint                    Repository Method
+  Get /tours                      tourRepository.findAll();
+  Get /tours/5                    tourRepository.findById(5);
+  Get /tours?page=1&size=5        tourRepository.findAll(PageRequest.of(1,5));
+
+- HTTP POST Mapping:
+  public interface TourPackageRepository extends JpaRepository<TourPackage,String>
+  API Endpoint                    Repository Method
+  POST /tourPackages              tourPackageRepository.save(new TourPackage("CZ","California Zoos"));
+  {
+    "code": "CZ",
+    "name": "California Zoos"
+  }
+
+- HTTP PUT/PATCH Mapping:
+  public interface TourRepository extends JpaRepository<Tour,Integer>
+  API Endpoint                    Repository Method
+  PUT /tours/2                    Tour two = tourRepository.findById(2);
+  {                               two.settitle("New title");
+    "title": "New title",         two.setDescription("desc");
+    "description": "desc",        two.setBlurb("new blurb");
+    "blurb": "new blurb",         tourRepository.save(two);
+    ...
+  }
+
+  PATCH /tours/2                  Tour two = tourRepository.findById(2);
+  {                               two.setBlurb("new blurb);
+    "blurb": "new blurb"          tourRepository.save(two);
+  }
+
+- HTTP DELETE Mapping:
+  public interface TourRepository extends JpaRepository<Tour,Integer>
+  API Endpoint                    Repository Method
+  DELETE /tours/1                 Tour one = tourRepository.findById(1);
+                                  tourRepository.delete(one);
+
+- HTTP GET /search to Query Methods
+  API Endpoint                                                Repository Method
+  Get /tourPackage/search/findByName?name=Backpack%20Cal      tourPackageRepository.findByName("Backpack Cal");
+  Get /tours/search/findByTourPackageCode?code=BC             tourRepository.findByTourPackageCode("BC")
