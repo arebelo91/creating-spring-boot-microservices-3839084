@@ -250,3 +250,104 @@ All steps via cli inside the project folder:
   API Endpoint                                                Repository Method
   Get /tourPackage/search/findByName?name=Backpack%20Cal      tourPackageRepository.findByName("Backpack Cal");
   Get /tours/search/findByTourPackageCode?code=BC             tourRepository.findByTourPackageCode("BC")
+
+# Section 04_03: Override default behavior
+
+- Override default path "/staffs" to "/staff"
+@RepositoryRestResource(path="staff",collectionResourceRel="staff")
+public interface StaffRepo extends JpaRepository<Staff,Integer> {}
+
+# Section 04_04: Swagger UI
+- Using springdoc-openapi library to generate Spring Boot API documentation:
+  <dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.5.0</version>
+  </dependency>
+- After launching the app we can access swagger at http://localhost:8080/swagger-ui  
+
+# Section 05: Expose RESTfull API's with Spring MVC
+# Section 05_01: Choosing the right framework
+- Allow creation of RESTfull APIs
+- Annotate with @RestController to specify that the class follow Restful Web service behavior
+- Spring Data REST vs MVC:
+  - - Spring MVC:
+      The RestController mediates between web requests and internals of the application
+      Client Request -> My RestController class -> My Service
+  - - Spring Data Rest:
+      The framework itself mediates between the web request and the persistence domain model
+      Client request -> Spring Data REST -> My Spring Data Repository
+
+- Why use Spring Web MVC?
+  - - Not using Spring Data Repositories
+  - - Hide internal Data Model from the client (entity schema)
+  - - Require business layer service
+
+# Section 05_02: Declaring a new RestController
+@RestController
+@RequestMapping(path="/tours/{tourId}/ratings")
+public class TourRatingController{
+  private TourRatingService tourRatingService;
+
+  public TourRatingController(TourRatingService tourRatingService){
+    this.tourRatingService = tourRatingService;
+  }
+}
+
+# Section 05_03: Create the RestController HTTP POST endpoint
+- Add below section to the TourRatingController class defined above:
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public void createTourRating(@PathVariable(value="tourId") int tourId,
+                              @RequestBody @Valid RatingDto ratingDto){
+    tourRatingService.createNew(tourId, ratingDto.getCustomerId(), ratingDto.getScore(),ratingDto.getComment());
+  }
+
+- Add exception handler for not found tours:
+
+  @ExceptionHandler(NoSuchElementException.class)
+  @ResponseStatus(Http.NOT_FOUND)
+  public String return404(NoSuchElementException exception){
+    return exception.getMessage();
+  }
+
+- RatingDto is a class for rating the tours. Contains attributes that have validations, e.g score (min=0 and max=5),
+  max size of a comment (255 characters), customer id not null. For validating the data, we need to add a dependency
+  to pom file:
+  <dependecy>
+    <groupId>org.springframewoek.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+  </dependency>
+
+# Section 05_04: Create the RestController HTTP GET endpoint
+- Create an endpoint for getting all the ratings for a tour:
+
+  @GetMapping
+  public List<RatingDto> getAllRatingsForTour(@PathVariable(value="tourId") int tourId){
+    List<TourRating> tourRatings = tourRatingService.lookupRatings(tourId);
+    return tourRatings.stream().map(RatingDto::new).toList();
+  }
+
+- Get the average score for a tour
+
+  @GetMapping("/average")
+  public Map<String,Double> getAverage(@PathVariable(value="tourId") int tourId){
+    return Map.of(k1:"average", tourRatingService.getAverageScore(tourId));
+  }
+
+# Section 05_04: Create the RestController HTTP PUT, and DELETE endpoints
+- Put
+  @PutMapping
+  public RatingDto updateWithPut(@PathVariable(value="tourId") int tourId
+                                @RequestBody @Valid RatingDto ratingDto){
+    return new RatingDto(tourRatingService.update(tourId,ratingDto.getCustomerId(),
+    ratingDto.getScore(), ratingDto.getComment()));
+  }
+
+- Delete
+  @DeleteMapping("{customerId}")
+  public voud delete(@PathVariable(value="tourId") int tourId
+                    @PathVariable(value"costumerId") int customerId){
+    tourRatingService.delete(tourId,customerId);
+  }
